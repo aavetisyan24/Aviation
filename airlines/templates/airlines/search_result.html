@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+<!--{{ search_result }}-->
+<div>
+    Select your departure flight from
+    {{origin}} to {{destination}}<br><br>
+</div>
+
+Departure date: {{ date }}
+Return date: {{ date_return }}<br><br>
+{% for n in search_result.0 %}
+    <div>
+        {{ n.id }} {{ search_result.1 }} - {{search_result.2}}
+         Price - {{n.price.total}} {{n.price.currency}}
+    </div>
+{% endfor %}
+
+{% endblock %}

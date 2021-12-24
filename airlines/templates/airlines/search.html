@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<!--{% for i in airport %}-->
+<!--   {{i.0}}-->
+<!--{% endfor %}-->
+<!--{{ airport.items}}-->
+<!--{{today}}-->
+<!--{{next_year}}-->
+
+<div>
+    <form action="search_result" method="get" name="myForm">
+        <div>
+          <label for="origin"></label>
+          <input type="text" list="origin" name="origin" placeholder="From" required>
+                  <datalist id="origin" >
+                    <select class="form-control" name="symbol">
+                       {% for key,value in airport.items %}
+                       <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}}) </option>
+                       {% endfor %}
+                    </select>
+                  </datalist>
+
+          <button type="button"><-></button>
+          <label for="destination"></label>
+          <input type="text" list="destination" name="destination" placeholder="To" required><br><br>
+                  <datalist id="destination">
+                    <select class="form-control" name="symbol">
+                       {% for key,value in airport.items %}
+                       <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}}) </option>
+                       {% endfor %}
+                    </select>
+                  </datalist>
+        </div>
+        <div class="dates">
+            <div>
+              <label for="day_origin" >Depart:</label>
+              <input type="date" id="day_origin" name="day_origin" min={{today}} required >
+
+              <label for="day_return">Return:</label>
+              <input type="date" id="day_return" name="day_return" max={{next_year}}><br><br>
+            </div>
+        </div>
+        <div class="stopover">
+            <label for="stopover" >Only direct flights:</label>
+            <input type="checkbox" name="stopover" id="stopover" value="true"/><br><br>
+        </div>
+
+        <input type="Submit" value="Show flights" />
+    </form>
+</div>
+
+
+{% endblock %}
+
