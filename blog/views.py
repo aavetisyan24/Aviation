@@ -24,6 +24,9 @@ def home(request):
     }
     return render(request, "blog/home.html", context)
 
+# def airlines(request):
+#     return HttpResponse("Hello Airlines")
+
 
 def about(request):
     return render(request, "blog/about.html", {"title": "About"})
@@ -31,4 +34,8 @@ def about(request):
 
 def flyto(request):
     return render(request, "blog/flyto.html", {"title": "Fly To"})
+
+
+def airlines(request):
+    return render(request, "airlines/search.html", {"title": "Search"})
 

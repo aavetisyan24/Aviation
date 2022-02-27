@@ -1,41 +1,22 @@
-from amadeus import Client, ResponseError
-import pprint
-import key
+adult = [1,2,3,4,5,6,7,8,9]
+child = [0,1,2,3,4,5]
+infant = [0,1,2,3,4,5]
 
-amadeus = Client(
-    client_id=key.API_KEY,
-    client_secret=key.API_SECRET
-)
 
-def flt_search(origin="JFK", destination="LAX", day_origin='2021-12-24', day_return='', stopover='true', max_flight_show=7, adults=1):
-    try:
-        if day_return:
-            print("return day is: ",day_return)
-            response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=origin,
-                destinationLocationCode=destination,
-                departureDate=day_origin,
-                returnDate=day_return,
-                adults=adults,
-                max=max_flight_show,
-                nonStop=stopover
-            )
-        else:
-            print("one way flight")
-            response = amadeus.shopping.flight_offers_search.get(
-                originLocationCode=origin,
-                destinationLocationCode=destination,
-                departureDate=day_origin,
-                adults=adults,
-                max=max_flight_show,
-                nonStop=stopover
-            )
-        message = response.data
-        pprint.pprint(message)
-        print(len(message))
-        return message, origin, destination
 
-    except ResponseError as error:
-        return error
 
-flt_search()
+def customers(a):
+    lst1 = [0, 1, 2, 3, 4]
+    maximumadult = list(range(1, 10))
+    maxchild = list(range(9))
+    maxinf = list(range(6))
+    if a in lst1:
+        maxchild=list(range(6))
+        maxinf=a
+    elif a not in lst1:
+        maxinf=list(range(6))
+        maxchild = list(range(10 - a))
+    print(maximumadult, maxchild, maxinf)
+    return [maximumadult, maxchild, maxinf]
+
+print(customers())

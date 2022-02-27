@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "lets_fly",
+    "airlines",
     "blog.apps.BlogConfig",
     "users.apps.UsersConfig",
     "crispy_forms",

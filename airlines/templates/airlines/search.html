@@ -7,48 +7,195 @@
 <!--{{today}}-->
 <!--{{next_year}}-->
 
+
 <div>
     <form action="search_result" method="get" name="myForm">
         <div>
-          <label for="origin"></label>
-          <input type="text" list="origin" name="origin" placeholder="From" required>
-                  <datalist id="origin" >
-                    <select class="form-control" name="symbol">
-                       {% for key,value in airport.items %}
-                       <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}}) </option>
-                       {% endfor %}
-                    </select>
-                  </datalist>
+            <label for="origin"></label>
+            <input type="text" list="origin" name="origin" placeholder="From" required>
+            <datalist id="origin">
+                <select class="form-control" name="symbol">
+                    {% for key,value in airport.items %}
+                    <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}})</option>
+                    {% endfor %}
+                </select>
+            </datalist>
 
-          <button type="button"><-></button>
-          <label for="destination"></label>
-          <input type="text" list="destination" name="destination" placeholder="To" required><br><br>
-                  <datalist id="destination">
-                    <select class="form-control" name="symbol">
-                       {% for key,value in airport.items %}
-                       <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}}) </option>
-                       {% endfor %}
-                    </select>
-                  </datalist>
+            <button type="button"><-></button>
+            <label for="destination"></label>
+            <input type="text" list="destination" name="destination" placeholder="To" required><br><br>
+            <datalist id="destination">
+                <select class="form-control" name="symbol">
+                    {% for key,value in airport.items %}
+                    <option value="{{key}} - {{value.0}}">{{value.1}} ({{value.2}})</option>
+                    {% endfor %}
+                </select>
+            </datalist>
         </div>
         <div class="dates">
             <div>
-              <label for="day_origin" >Depart:</label>
-              <input type="date" id="day_origin" name="day_origin" min={{today}} required >
+                <label for="day_origin">Depart:</label>
+                <input type="date" id="day_origin" name="day_origin" min={{today}} required value="{{today}}">
 
-              <label for="day_return">Return:</label>
-              <input type="date" id="day_return" name="day_return" max={{next_year}}><br><br>
+                <label for="day_return">Return:</label>
+                <input type="date" id="day_return" name="day_return" min={{today}} max={{next_year}}><br><br>
             </div>
         </div>
         <div class="stopover">
-            <label for="stopover" >Only direct flights:</label>
+            <label for="stopover">Only direct flights:</label>
             <input type="checkbox" name="stopover" id="stopover" value="true"/><br><br>
         </div>
 
-        <input type="Submit" value="Show flights" />
+
+        <label for="adult">Adult</label>
+        <select name="adult" id="adult" oninput="myFunction()">
+
+        </select>
+
+        <label for="child">Child</label>
+        <select name="child" id="child">
+
+        </select>
+
+        <label for="infant">Infant</label>
+        <select name="infant" id="infant">
+
+        </select><br><br>
+
+
+        <script>
+        // Adult, Child and Infant values on start point, creating options for tag select
+            var options = "";
+            for(var i = 1; i<10; i++ ) {
+                options += "<option val="+i+">"+i+"</option>";
+                document.getElementById('adult').innerHTML = options
+                };
+
+            var options = "";
+            for(var i = 0; i<9; i++ ) {
+                options += "<option val="+i+">"+i+"</option>";
+                document.getElementById('child').innerHTML = options
+                };
+
+            var options = "";
+            for(var i = 0; i<2; i++ ) {
+                options += "<option val="+i+">"+i+"</option>";
+                document.getElementById('infant').innerHTML = options
+                };
+
+        </script>
+
+        <script>
+        // function will work after selecting Adult oninput="myFunction()"
+            function myFunction(){
+
+                // getting adult, child and infant values
+                var adult = document.getElementById("adult").value;
+                var child_val = document.getElementById("child").value;
+                var infant_val = document.getElementById("infant").value;
+
+                var total = parseInt(adult) + parseInt(child_val);
+                console.log("sum of child and adult is:",total);
+
+                // string to integer
+                var chd = parseInt(child_val);
+                var adl = parseInt(adult);
+                var inf = parseInt(infant_val);
+
+                // condition to keep child selected value when adult+child doesn't get more than 9
+                if (chd == 0){
+                    child(adult)
+                    };
+
+                if (chd !== 0 && (adl+chd)>9){
+                    child(adult)
+                    };
+
+                if (chd !== 0 && (adl+chd)<=9){
+                    child(adult);
+                    document.getElementById("child").selectedIndex = child_val
+                    };
+
+                // condition to keep infant selected value when adult is not less then infant
+                if (inf == 0){
+                    infant(adult)
+                    };
+
+                if ((inf !== 0) && (adl<inf)){
+                    infant(adult);
+                    console.log(adult, child_val, infant_val)
+                    };
+
+                if (inf !== 0 && adl>=inf){
+                    infant(adult);
+                    document.getElementById("infant").selectedIndex = infant_val;
+                    };
+                console.log("----", adult, child_val, infant_val)
+             }
+
+        </script>
+
+        <script>
+        // Child max option update after changing adult
+            function child(adult){
+                var options = "";
+                for (var i = 0; i<(10-parseInt(adult)); i++ ) {
+                    options += "<option val="+i+">"+i+"</option>";
+                    document.getElementById('child').innerHTML = options
+                };
+            }
+
+        </script>
+        <script>
+        // infant max option update after changing adult
+             function infant(adult){
+                var options_i = "";
+                for (var i = 0; i<(1 + parseInt(adult)); i++ ) {
+                    options_i += "<option val="+i+">"+i+"</option>";
+                    document.getElementById('infant').innerHTML = options_i;
+                }
+            }
+
+        </script>
+
+        <input type="Submit" value="Show flights"/>
     </form>
 </div>
 
 
 {% endblock %}
 
+
+<!--        <label for="adult">Adult</label>-->
+<!--        <input type="number" id="adult" min="1" max="9" value="1" oninput="myFunction1()">-->
+
+<!--        <label for="child">Child</label>-->
+<!--        <input type="number" id="child" min="0" max="8" value="0" oninput="myFunction2()">-->
+
+<!--        <label for="infant">Infant</label>-->
+<!--        <input type="number" name="infant" id="infant" min="0" max="1" value="0"><br><br>-->
+<!--        function myFunction1(){-->
+<!--            var adult = document.getElementById("adult").value;-->
+<!--            var child = document.getElementById("child");-->
+<!--            var infant = document.getElementById("infant");-->
+<!--            child.setAttribute("max", 9-adult);-->
+
+<!--        }-->
+
+<!--        function myFunction2(){-->
+<!--            var adult = document.getElementById("adult");-->
+<!--            var child = document.getElementById("child").value;-->
+<!--            adult.setAttribute("max", 9-child);-->
+<!--        }-->
+
+<!--        <script>-->
+<!--             function add_remove_options(chd, adl){-->
+<!--                var keep = 9-adl-->
+<!--                var ch = document.getElementById("child");-->
+<!--                var ad = document.getElementById("adult");-->
+<!--                console.log("-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;",ad.length, ch.length, adl, chd);-->
+<!--                for (var i=(9-adl); i<10; i++){-->
+<!--                    console.log(i, ch(i));-->
+<!--                    }-->
+<!--                }-->
+<!--        </script>-->
